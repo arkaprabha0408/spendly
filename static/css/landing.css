@@ -1,0 +1,226 @@
+/* ------------------------------------------------------------------ */
+/* Hero layout override — single column, centered                      */
+/* ------------------------------------------------------------------ */
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4.5rem 2rem 5rem;
+    gap: 3.5rem;
+    max-width: 900px;
+}
+
+.hero-inner {
+    max-width: 640px;
+    width: 100%;
+}
+
+.hero-actions {
+    justify-content: center;
+}
+
+.hero-visual {
+    display: flex !important;
+    justify-content: center;
+    width: 100%;
+    max-width: 780px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Badge                                                               */
+/* ------------------------------------------------------------------ */
+
+.lp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(26, 71, 42, 0.18);
+    margin-bottom: 1.75rem;
+}
+
+.lp-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Title                                                               */
+/* ------------------------------------------------------------------ */
+
+.lp-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5.5vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+}
+
+.lp-title-accent {
+    color: var(--accent);
+    display: block;
+}
+
+.lp-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    max-width: 520px;
+    margin: 0 auto 2rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Browser mockup                                                      */
+/* ------------------------------------------------------------------ */
+
+.lp-browser {
+    background: #eeebe4;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+    width: 100%;
+}
+
+.lp-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    background: #e4e1da;
+    border-bottom: 1px solid var(--border);
+}
+
+.lp-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.lp-dot-red    { background: #ff5f57; }
+.lp-dot-yellow { background: #febc2e; }
+.lp-dot-green-dot { background: #28c840; }
+
+.lp-browser-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Stat cards                                                          */
+/* ------------------------------------------------------------------ */
+
+.lp-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.lp-stat {
+    background: var(--paper-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-align: left;
+}
+
+.lp-stat-label {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    font-weight: 500;
+}
+
+.lp-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.lp-stat-sub {
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.lp-sub-danger  { color: var(--danger); }
+.lp-sub-success { color: var(--accent); }
+.lp-sub-muted   { color: var(--ink-muted); }
+
+/* ------------------------------------------------------------------ */
+/* Bar chart                                                           */
+/* ------------------------------------------------------------------ */
+
+.lp-bars {
+    background: var(--paper-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.lp-bar-row {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.lp-bar-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-align: right;
+}
+
+.lp-bar-track {
+    height: 8px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.lp-bar {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.lp-bar-food   { background: #c17f24; }
+.lp-bar-travel { background: #4a90d9; }
+.lp-bar-bills  { background: #7b6fd0; }
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .lp-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-stat {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .lp-stat-sub { display: none; }
+}
