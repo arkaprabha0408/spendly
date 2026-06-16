@@ -669,7 +669,7 @@ a { color: inherit; text-decoration: none; }
 /* ------------------------------------------------------------------ */
 
 .profile-page {
-    max-width: 860px;
+    max-width: 1060px;
     margin: 0 auto;
     padding: 3rem 2rem 5rem;
     display: flex;
@@ -755,6 +755,20 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 0.5rem;
 }
 
+.profile-stat__icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.profile-stat__icon-wrap--spending { background: var(--accent-2-light); color: var(--accent-2); }
+.profile-stat__icon-wrap--count    { background: var(--accent-light);   color: var(--accent); }
+.profile-stat__icon-wrap--category { background: var(--paper-warm);     color: var(--ink-soft); }
+
 .profile-stat__value {
     font-family: var(--font-display);
     font-size: 1.6rem;
@@ -796,6 +810,73 @@ a { color: inherit; text-decoration: none; }
 .profile-section__icon {
     color: var(--ink-muted);
 }
+
+/* Icon size utilities */
+.profile-icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+.profile-icon-md { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Two-column grid below the stats row */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* User card detail block */
+.profile-card__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.profile-user-email {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Section header transaction count pill */
+.profile-section__count {
+    margin-left: auto;
+    background: var(--paper-warm);
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    line-height: 1.6;
+}
+
+/* Category row: amount + percent grouped */
+.cat-row__meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.cat-row__pct {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+    min-width: 2.5rem;
+    text-align: right;
+}
+
+/* Empty state */
+.profile-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    gap: 0.5rem;
+    color: var(--ink-faint);
+}
+
+.profile-empty__icon { width: 32px; height: 32px; margin-bottom: 0.25rem; }
+.profile-empty__text { font-size: 0.95rem; font-weight: 500; color: var(--ink-muted); }
+.profile-empty__sub  { font-size: 0.82rem; }
 
 /* Transaction table */
 .txn-table {
@@ -848,12 +929,15 @@ a { color: inherit; text-decoration: none; }
     line-height: 1.5;
 }
 
-.badge--food     { background: var(--accent-2-light); color: var(--accent-2); }
-.badge--travel   { background: var(--accent-light);   color: var(--accent); }
-.badge--bills    { background: var(--paper-warm);     color: var(--ink-soft); }
-.badge--health   { background: var(--danger-light);   color: var(--danger); }
-.badge--shopping { background: var(--border-soft);    color: var(--ink-muted); }
-.badge--others   { background: var(--border);         color: var(--ink-muted); }
+.badge--food                       { background: var(--accent-2-light); color: var(--accent-2); }
+.badge--travel,
+.badge--transport                  { background: var(--accent-light);   color: var(--accent); }
+.badge--bills                      { background: var(--paper-warm);     color: var(--ink-soft); }
+.badge--health                     { background: var(--danger-light);   color: var(--danger); }
+.badge--shopping                   { background: var(--border-soft);    color: var(--ink-muted); }
+.badge--others,
+.badge--other                      { background: var(--border);         color: var(--ink-muted); }
+.badge--entertainment              { background: var(--accent-2-light); color: var(--accent-2); }
 
 /* Category breakdown */
 .cat-list {
@@ -899,12 +983,15 @@ a { color: inherit; text-decoration: none; }
     border-radius: 999px;
 }
 
-.bar--food     { background: var(--accent-2); }
-.bar--travel   { background: var(--accent); }
-.bar--bills    { background: var(--ink-muted); }
-.bar--health   { background: var(--danger); }
-.bar--shopping { background: var(--ink-soft); }
-.bar--others   { background: var(--ink-faint); }
+.bar--food          { background: var(--accent-2); }
+.bar--travel,
+.bar--transport     { background: var(--accent); }
+.bar--bills         { background: var(--ink-muted); }
+.bar--health        { background: var(--danger); }
+.bar--shopping      { background: var(--ink-soft); }
+.bar--others,
+.bar--other         { background: var(--ink-faint); }
+.bar--entertainment { background: var(--ink); }
 
 /* ------------------------------------------------------------------ */
 /* Responsive                                                          */
@@ -928,8 +1015,10 @@ a { color: inherit; text-decoration: none; }
 
     .profile-page { padding: 1.5rem 1rem 3rem; }
     .profile-card { flex-direction: column; text-align: center; }
+    .profile-card__details { align-items: center; }
     .profile-member-since { justify-content: center; }
     .profile-stats { grid-template-columns: 1fr; }
+    .profile-grid { grid-template-columns: 1fr; }
     .txn-table th,
     .txn-table td { padding: 0.75rem 1rem; }
     .cat-list { padding: 1rem; }

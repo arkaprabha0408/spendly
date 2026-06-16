@@ -2,6 +2,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.queries import get_user_by_id, get_summary_stats, get_recent_transactions, get_category_breakdown
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-change-in-production"
@@ -96,34 +97,15 @@ def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    user = {
-        "name": "Arka Biswas",
-        "email": "arka@example.com",
-        "member_since": "January 2025",
-        "initials": "AB",
-    }
+    user_id = session["user_id"]
+    user = get_user_by_id(user_id)
+    if user is None:
+        session.clear()
+        return redirect(url_for("login"))
 
-    stats = {
-        "total_spent": "₹24,850",
-        "transaction_count": 18,
-        "top_category": "Food",
-    }
-
-    transactions = [
-        {"date": "12 Jun 2025", "description": "Swiggy Order",      "category": "Food",     "amount": "₹430"},
-        {"date": "10 Jun 2025", "description": "Uber Cab",           "category": "Travel",   "amount": "₹280"},
-        {"date": "08 Jun 2025", "description": "Electricity Bill",   "category": "Bills",    "amount": "₹1,200"},
-        {"date": "06 Jun 2025", "description": "Apollo Pharmacy",    "category": "Health",   "amount": "₹650"},
-        {"date": "04 Jun 2025", "description": "Amazon Purchase",    "category": "Shopping", "amount": "₹2,100"},
-    ]
-
-    categories = [
-        {"name": "Food",     "total": "₹8,400", "percent": 34},
-        {"name": "Bills",    "total": "₹6,200", "percent": 25},
-        {"name": "Shopping", "total": "₹5,100", "percent": 21},
-        {"name": "Travel",   "total": "₹3,200", "percent": 13},
-        {"name": "Health",   "total": "₹1,950", "percent": 8},
-    ]
+    stats        = get_summary_stats(user_id)
+    transactions = get_recent_transactions(user_id)
+    categories   = get_category_breakdown(user_id)
 
     return render_template(
         "profile.html",
