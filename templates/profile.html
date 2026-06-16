@@ -13,11 +13,14 @@
   <!-- User info card -->
   <section class="profile-card">
     <div class="profile-avatar">{{ user.initials }}</div>
-    <div>
+    <div class="profile-card__details">
       <p class="profile-user-name">{{ user.name }}</p>
-      <p class="profile-user-email">{{ user.email }}</p>
+      <p class="profile-user-email">
+        <i data-lucide="mail" class="profile-icon-sm"></i>
+        {{ user.email }}
+      </p>
       <p class="profile-member-since">
-        <i data-lucide="calendar" class="profile-member-since" style="width:14px;height:14px;"></i>
+        <i data-lucide="calendar" class="profile-icon-sm"></i>
         Member since {{ user.member_since }}
       </p>
     </div>
@@ -26,74 +29,106 @@
   <!-- Summary stats row -->
   <div class="profile-stats">
     <div class="profile-stat">
-      <i data-lucide="wallet" class="profile-stat__icon" style="width:18px;height:18px;"></i>
+      <div class="profile-stat__icon-wrap profile-stat__icon-wrap--spending">
+        <i data-lucide="wallet" class="profile-icon-md"></i>
+      </div>
       <span class="profile-stat__value">{{ stats.total_spent }}</span>
       <span class="profile-stat__label">Total Spent</span>
     </div>
     <div class="profile-stat">
-      <i data-lucide="receipt" class="profile-stat__icon" style="width:18px;height:18px;"></i>
+      <div class="profile-stat__icon-wrap profile-stat__icon-wrap--count">
+        <i data-lucide="receipt" class="profile-icon-md"></i>
+      </div>
       <span class="profile-stat__value">{{ stats.transaction_count }}</span>
       <span class="profile-stat__label">Transactions</span>
     </div>
     <div class="profile-stat">
-      <i data-lucide="tag" class="profile-stat__icon" style="width:18px;height:18px;"></i>
+      <div class="profile-stat__icon-wrap profile-stat__icon-wrap--category">
+        <i data-lucide="tag" class="profile-icon-md"></i>
+      </div>
       <span class="profile-stat__value">{{ stats.top_category }}</span>
       <span class="profile-stat__label">Top Category</span>
     </div>
   </div>
 
-  <!-- Transaction history -->
-  <section class="profile-section">
-    <header class="profile-section__header">
-      <i data-lucide="receipt" class="profile-section__icon" style="width:18px;height:18px;"></i>
-      <h2 class="profile-section__title">Recent Transactions</h2>
-    </header>
-    <table class="txn-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th style="text-align:right;">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for t in transactions %}
-        <tr>
-          <td class="txn-date">{{ t.date }}</td>
-          <td class="txn-desc">{{ t.description }}</td>
-          <td>
-            <span class="badge badge--{{ t.category | lower }}">{{ t.category }}</span>
-          </td>
-          <td class="txn-amount">{{ t.amount }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </section>
+  <!-- Two-column grid: transactions + breakdown -->
+  <div class="profile-grid">
 
-  <!-- Category breakdown -->
-  <section class="profile-section">
-    <header class="profile-section__header">
-      <i data-lucide="pie-chart" class="profile-section__icon" style="width:18px;height:18px;"></i>
-      <h2 class="profile-section__title">Spending by Category</h2>
-    </header>
-    <ul class="cat-list">
-      {% for c in categories %}
-      <li class="cat-row">
-        <div class="cat-row__info">
-          <span class="cat-row__name">
-            <span class="badge badge--{{ c.name | lower }}">{{ c.name }}</span>
-          </span>
-          <span class="cat-row__amount">{{ c.total }}</span>
-        </div>
-        <div class="cat-bar-track">
-          <div class="cat-bar-fill bar--{{ c.name | lower }}" style="width: {{ c.percent }}%;"></div>
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
+    <!-- Recent Transactions -->
+    <section class="profile-section">
+      <header class="profile-section__header">
+        <i data-lucide="receipt" class="profile-icon-md profile-section__icon"></i>
+        <h2 class="profile-section__title">Recent Transactions</h2>
+        <span class="profile-section__count">{{ transactions | length }}</span>
+      </header>
+
+      {% if transactions %}
+      <table class="txn-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th style="text-align:right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in transactions %}
+          <tr>
+            <td class="txn-date">{{ t.date }}</td>
+            <td class="txn-desc">{{ t.description }}</td>
+            <td>
+              <span class="badge badge--{{ t.category | lower }}">{{ t.category }}</span>
+            </td>
+            <td class="txn-amount">{{ t.amount }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="profile-empty">
+        <i data-lucide="inbox" class="profile-empty__icon"></i>
+        <p class="profile-empty__text">No transactions yet</p>
+        <p class="profile-empty__sub">Add your first expense to see it here</p>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- Spending by Category -->
+    <section class="profile-section">
+      <header class="profile-section__header">
+        <i data-lucide="pie-chart" class="profile-icon-md profile-section__icon"></i>
+        <h2 class="profile-section__title">Spending by Category</h2>
+      </header>
+
+      {% if categories %}
+      <ul class="cat-list">
+        {% for c in categories %}
+        <li class="cat-row">
+          <div class="cat-row__info">
+            <span class="cat-row__name">
+              <span class="badge badge--{{ c.name | lower }}">{{ c.name }}</span>
+            </span>
+            <div class="cat-row__meta">
+              <span class="cat-row__amount">{{ c.total }}</span>
+              <span class="cat-row__pct">{{ c.percent }}%</span>
+            </div>
+          </div>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill bar--{{ c.name | lower }}" style="width: {{ c.percent }}%;"></div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="profile-empty">
+        <i data-lucide="bar-chart-2" class="profile-empty__icon"></i>
+        <p class="profile-empty__text">No spending data yet</p>
+      </div>
+      {% endif %}
+    </section>
+
+  </div><!-- /.profile-grid -->
 
 </main>
 {% endblock %}
