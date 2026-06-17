@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
@@ -6,6 +7,39 @@ from database.queries import get_user_by_id, get_summary_stats, get_recent_trans
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-change-in-production"
+
+
+# ------------------------------------------------------------------ #
+# Helpers                                                             #
+# ------------------------------------------------------------------ #
+
+def resolve_date_filter(preset, date_from, date_to):
+    """Resolve URL params into (date_from, date_to, filter_label, active_preset)."""
+    today = date.today()
+
+    if preset == "7d":
+        return (today - timedelta(days=6)).isoformat(), today.isoformat(), "Last 7 Days", "7d"
+    if preset == "30d":
+        return (today - timedelta(days=29)).isoformat(), today.isoformat(), "Last 30 Days", "30d"
+    if preset == "month":
+        return today.replace(day=1).isoformat(), today.isoformat(), "This Month", "month"
+    if preset == "all":
+        return None, None, "All Time", "all"
+
+    if date_from and date_to:
+        try:
+            d_from = date.fromisoformat(date_from)
+            d_to   = date.fromisoformat(date_to)
+            if d_from > d_to:
+                d_from, d_to = d_to, d_from
+            label = (
+                f"{d_from.strftime('%d %b %Y')} – {d_to.strftime('%d %b %Y')}"
+            )
+            return d_from.isoformat(), d_to.isoformat(), label, ""
+        except ValueError:
+            pass
+
+    return None, None, "All Time", "all"
 
 
 # ------------------------------------------------------------------ #
@@ -103,9 +137,17 @@ def profile():
         session.clear()
         return redirect(url_for("login"))
 
-    stats        = get_summary_stats(user_id)
-    transactions = get_recent_transactions(user_id)
-    categories   = get_category_breakdown(user_id)
+    preset    = request.args.get("preset", "").strip()
+    date_from = request.args.get("date_from", "").strip()
+    date_to   = request.args.get("date_to",   "").strip()
+
+    date_from, date_to, filter_label, active_preset = resolve_date_filter(
+        preset, date_from, date_to
+    )
+
+    stats        = get_summary_stats(user_id, date_from=date_from, date_to=date_to)
+    transactions = get_recent_transactions(user_id, date_from=date_from, date_to=date_to)
+    categories   = get_category_breakdown(user_id, date_from=date_from, date_to=date_to)
 
     return render_template(
         "profile.html",
@@ -113,6 +155,10 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        filter_label=filter_label,
+        active_preset=active_preset,
+        date_from=date_from or "",
+        date_to=date_to or "",
     )
 
 
