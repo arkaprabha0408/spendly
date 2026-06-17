@@ -26,6 +26,54 @@
     </div>
   </section>
 
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <form class="filter-bar__form" method="GET" action="{{ url_for('profile') }}">
+
+      <div class="filter-bar__presets">
+        <button type="submit" name="preset" value="7d"
+          class="filter-btn{% if active_preset == '7d' %} filter-btn--active{% endif %}">
+          Last 7 Days
+        </button>
+        <button type="submit" name="preset" value="30d"
+          class="filter-btn{% if active_preset == '30d' %} filter-btn--active{% endif %}">
+          Last 30 Days
+        </button>
+        <button type="submit" name="preset" value="month"
+          class="filter-btn{% if active_preset == 'month' %} filter-btn--active{% endif %}">
+          This Month
+        </button>
+        <button type="submit" name="preset" value="all"
+          class="filter-btn{% if active_preset == 'all' %} filter-btn--active{% endif %}">
+          All Time
+        </button>
+      </div>
+
+      <details class="filter-bar__custom"{% if active_preset == '' %} open{% endif %}>
+        <summary class="filter-bar__custom-toggle">
+          <i data-lucide="calendar-range" class="profile-icon-sm"></i>
+          Custom range
+        </summary>
+        <div class="filter-bar__custom-fields">
+          <label class="filter-bar__label" for="date_from">From</label>
+          <input class="form-input filter-bar__date-input" type="date"
+                 id="date_from" name="date_from" value="{{ date_from }}">
+          <label class="filter-bar__label" for="date_to">To</label>
+          <input class="form-input filter-bar__date-input" type="date"
+                 id="date_to" name="date_to" value="{{ date_to }}">
+          <button type="submit" class="filter-btn filter-btn--apply">Apply</button>
+        </div>
+      </details>
+
+    </form>
+  </div>
+
+  <!-- Showing label -->
+  <p class="filter-label">
+    <i data-lucide="filter" class="profile-icon-sm"></i>
+    Showing: <strong>{{ filter_label }}</strong>
+  </p>
+
   <!-- Summary stats row -->
   <div class="profile-stats">
     <div class="profile-stat">
