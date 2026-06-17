@@ -64,6 +64,19 @@ def get_user_by_email(email):
         conn.close()
 
 
+def add_expense(user_id, amount, category, date, description):
+    conn = get_db()
+    try:
+        conn.execute(
+            "INSERT INTO expenses (user_id, amount, category, date, description) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (user_id, amount, category, date, description),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def seed_db():
     conn = get_db()
     try:

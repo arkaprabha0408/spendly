@@ -108,6 +108,10 @@
         <i data-lucide="receipt" class="profile-icon-md profile-section__icon"></i>
         <h2 class="profile-section__title">Recent Transactions</h2>
         <span class="profile-section__count">{{ transactions | length }}</span>
+        <a href="{{ url_for('add_expense') }}" class="profile-add-btn">
+          <i data-lucide="plus-circle"></i>
+          Add Expense
+        </a>
       </header>
 
       {% if transactions %}
@@ -137,7 +141,9 @@
       <div class="profile-empty">
         <i data-lucide="inbox" class="profile-empty__icon"></i>
         <p class="profile-empty__text">No transactions yet</p>
-        <p class="profile-empty__sub">Add your first expense to see it here</p>
+        <p class="profile-empty__sub">
+          <a href="{{ url_for('add_expense') }}">Add your first expense</a> to see it here
+        </p>
       </div>
       {% endif %}
     </section>
