@@ -10,6 +10,13 @@
 
   <h1 class="profile-page-title">My Profile</h1>
 
+  {% if success %}
+  <div class="profile-success">
+    <i data-lucide="check-circle" class="profile-icon-sm"></i>
+    {{ success }}
+  </div>
+  {% endif %}
+
   <!-- User info card -->
   <section class="profile-card">
     <div class="profile-avatar">{{ user.initials }}</div>
@@ -122,6 +129,7 @@
             <th>Description</th>
             <th>Category</th>
             <th style="text-align:right;">Amount</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -133,6 +141,9 @@
               <span class="badge badge--{{ t.category | lower }}">{{ t.category }}</span>
             </td>
             <td class="txn-amount">{{ t.amount }}</td>
+            <td class="txn-actions">
+              <a href="{{ url_for('edit_expense', id=t.id) }}" class="txn-edit-link">Edit</a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
